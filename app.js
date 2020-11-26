@@ -2,11 +2,14 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const app = express();
 
+var items = [];
+
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.get("/", function(req, res) {
 
   var today = new Date();
@@ -19,13 +22,15 @@ app.get("/", function(req, res) {
   var day = today.toLocaleDateString('en-US', options);
 
   res.render("list.ejs", {
-    kindOfDay: day
+    kindOfDay: day,
+    newListItems: items
   });
 
 });
 
-app.post("/", function(req,res){
-  console.log(req.body.newItem);
+app.post("/", function(req, res) {
+  items.push(req.body.newItem);
+  res.redirect("/");
 });
 
 
